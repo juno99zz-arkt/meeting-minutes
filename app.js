@@ -40,12 +40,19 @@ async function renderMinutesInner(id) {
   const m = id ? await Data.getMinute(id) : null;
   if (m && m.status !== "done") {
     $("#detail").innerHTML = `<h2>${esc(m.title)}</h2><div class="meta"><span>${fmt(m.created_at)}</span></div>
-      <p class="empty">${m.status === "error" ? "회의록을 만들다 문제가 생겼어요: " + esc(m.error) : "녹음은 저장됐어요. 회의록을 만드는 중이에요."}</p>`;
+      <p class="empty">${m.status === "error" ? "회의록을 만들다 문제가 생겼어요: " + esc(m.error) : "녹음은 저장됐어요. 회의록을 만드는 중이에요."}</p>
+      <button class="btn-primary" id="retryBtn">회의록 다시 만들기</button>`;
+    $("#retryBtn").onclick = async () => {
+      $("#retryBtn").disabled = true; $("#retryBtn").textContent = "만드는 중… (1~2분)";
+      try { await Data.makeMinutes(m.id); } catch (e) {}
+      renderMinutes(m.id);
+    };
     return;
   }
   $("#detail").innerHTML = !m ? `<p class="empty">녹음을 올리면 회의록이 여기에 보여요.</p>` : `
     <h2>${esc(m.title)}</h2>
     <div class="meta"><span>${fmt(m.created_at)}</span>${m.mailed ? `<span class="badge">메일 발송 완료</span>` : ""}</div>
+    ${!m.mailed && m.error ? `<p class="error">${esc(m.error)}</p>` : ""}
     <h3>요약</h3><p>${esc(m.summary)}</p>
     <h3>결정사항</h3><ul>${(m.decisions||[]).map(d=>`<li>${esc(d)}</li>`).join("")}</ul>
     <h3>할 일</h3><ul>${(m.todos||[]).map(d=>`<li>${esc(d)}</li>`).join("")}</ul>
@@ -77,13 +84,13 @@ $("#startBtn").addEventListener("click", async () => {
     const m = await Data.createFromAudio(picked, $("#titleInput").value.trim(), step => {
       let passed = true;
       steps.forEach(li => {
-        if (li.dataset.step === step) { li.className = "doing"; passed = false; }
+        if (li.dataset.step === step || (step === "transcribe" && li.dataset.step !== "upload")) { li.className = "doing"; passed = false; }
         else li.className = passed ? "ok" : "";
       });
     });
-    if (m.status === "done") steps.forEach(li => li.className = "ok");
-    else { steps[0].className = "ok"; steps.slice(1).forEach(li => li.className = ""); }
-    $("#doneMsg").textContent = m.status === "done" ? "✅ 회의록이 만들어졌고 메일함으로 보냈어요." : "✅ 녹음을 저장했어요. (회의록 만들기·메일은 다음 단계에서 연결돼요)";
+    steps.forEach(li => li.className = "ok");
+    if (!m.mailed) steps[3].className = "fail";
+    $("#doneMsg").textContent = m.mailed ? "✅ 회의록이 만들어졌고 메일로 보냈어요." : "✅ 회의록은 만들어졌어요. ⚠️ " + (m.error || "메일은 보내지 못했어요");
     $("#openResult").href = "#minutes/" + m.id;
     $("#doneBox").hidden = false;
     pick(null); $("#fileInput").value = ""; $("#titleInput").value = "";

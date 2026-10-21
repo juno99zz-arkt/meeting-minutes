@@ -32,8 +32,7 @@ const Data = {
     return data;
   },
 
-  // 녹음 → 보관함에 저장 → 회의록 서랍에 한 줄 추가
-  // (글로 옮기기·회의록 만들기·메일은 서버 기능 연결 단계에서 붙습니다)
+  // 녹음 → 보관함에 저장 → 회의록 서랍에 한 줄 추가 → 화면 뒤 직원(서버 기능)에게 회의록·메일 부탁
   async createFromAudio(file, title, onStep) {
     const user = await this.currentUser();
     if (!user) throw new Error("로그인이 필요해요");
@@ -46,6 +45,17 @@ const Data = {
       .insert({ title: title || file.name, audio_path: path, status: "processing" })
       .select().single();
     if (error) throw error;
-    return data;
+    return this.makeMinutes(data.id, onStep);
+  },
+
+  // 서버 기능 부르기 (다시 시도할 때도 사용)
+  async makeMinutes(id, onStep = () => {}) {
+    onStep("transcribe");
+    await sb.functions.invoke("make-minutes", { body: { id } });
+    const row = await this.getMinute(id);
+    if (!row) throw new Error("회의록을 찾을 수 없어요");
+    if (row.status === "error") throw new Error(row.error || "회의록을 만들지 못했어요");
+    if (row.status !== "done") throw new Error("회의록 만들기가 끝나지 않았어요. 잠시 뒤 «회의록 보기»에서 확인해 주세요.");
+    return row;
   }
 };
