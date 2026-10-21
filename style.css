@@ -1,0 +1,62 @@
+:root{
+  --blue:#2563eb; --blue-d:#1d4ed8; --blue-l:#eff4ff; --ink:#0f172a; --sub:#64748b;
+  --line:#e2e8f0; --bg:#f6f8fb; --card:#fff; --ok:#16a34a; --err:#dc2626;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Pretendard,-apple-system,"Malgun Gothic",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;word-break:keep-all;-webkit-text-size-adjust:100%}
+[hidden]{display:none!important}
+.top{background:var(--blue);color:#fff}
+.top-inner{max-width:980px;margin:0 auto;padding:20px 16px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.brand h1{margin:0;font-size:22px;font-weight:700;letter-spacing:-.3px}
+.brand p{margin:2px 0 0;font-size:14px;opacity:.85}
+.user{display:flex;gap:10px;align-items:center;font-size:13px;opacity:.95;flex-wrap:wrap;justify-content:flex-end}
+.btn-text{background:none;border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:6px;padding:4px 10px;font:inherit;cursor:pointer}
+.tabs{max-width:980px;margin:0 auto;padding:0 16px;display:flex;gap:4px}
+.tabs a{color:#fff;opacity:.75;text-decoration:none;padding:10px 14px;font-size:15px;border-bottom:3px solid transparent}
+.tabs a.on{opacity:1;border-color:#fff;font-weight:600}
+main{max-width:980px;margin:0 auto;padding:20px 16px 48px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px}
+.card h2{margin:0 0 6px;font-size:18px}
+.center{max-width:420px;margin:40px auto;text-align:center}
+.muted{color:var(--sub);font-size:14px;margin:0 0 16px}
+.btn-google{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 20px;font:inherit;font-weight:600;cursor:pointer}
+.btn-google:hover{background:var(--blue-l)}
+.drop{display:flex;flex-direction:column;align-items:center;gap:4px;border:2px dashed #bfd0f5;background:var(--blue-l);border-radius:12px;padding:28px 16px;cursor:pointer;text-align:center}
+.drop.over{border-color:var(--blue)}
+.drop-icon{font-size:28px}
+.title-input{width:100%;margin:14px 0 12px;padding:12px;border:1px solid var(--line);border-radius:8px;font:inherit}
+.btn-primary{width:100%;background:var(--blue);color:#fff;border:0;border-radius:8px;padding:13px;font:inherit;font-weight:600;cursor:pointer}
+.btn-primary:disabled{background:#a9bef0;cursor:not-allowed}
+.steps{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:8px}
+.steps li{padding:10px 12px;border-radius:8px;background:#f1f5f9;color:var(--sub);font-size:14px}
+.steps li::before{content:"○ ";}
+.steps li.doing{background:var(--blue-l);color:var(--blue-d);font-weight:600}
+.steps li.doing::before{content:"⏳ "}
+.steps li.ok{color:var(--ok)}
+.steps li.ok::before{content:"✔ "}
+.done{margin-top:14px;padding:12px;border-radius:8px;background:#ecfdf3;color:#166534;font-size:14px}
+.done a{color:var(--blue-d);font-weight:600;margin-left:6px}
+.error{margin-top:14px;padding:12px;border-radius:8px;background:#fef2f2;color:var(--err);font-size:14px;white-space:pre-wrap}
+.layout{display:grid;grid-template-columns:280px 1fr;gap:16px;align-items:start}
+.list ul{list-style:none;margin:10px 0 0;padding:0}
+.list li a{display:block;padding:10px;border-radius:8px;text-decoration:none;color:var(--ink)}
+.list li a:hover{background:#f1f5f9}
+.list li a.on{background:var(--blue-l);color:var(--blue-d)}
+.list li small{display:block;color:var(--sub);font-size:12px}
+.detail h2{font-size:20px}
+.meta{color:var(--sub);font-size:13px;margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap}
+.badge{background:#ecfdf3;color:var(--ok);border-radius:99px;padding:1px 9px;font-size:12px}
+.detail h3{font-size:15px;color:var(--blue-d);margin:18px 0 6px;padding-top:12px;border-top:1px solid var(--line)}
+.detail ul{margin:0;padding-left:20px}
+.detail p{margin:0}
+.empty{color:var(--sub);text-align:center;padding:30px 0}
+details.transcript{margin-top:18px;font-size:14px;color:var(--sub)}
+details.transcript pre{white-space:pre-wrap;font-family:inherit;background:#f8fafc;padding:12px;border-radius:8px}
+@media (max-width:720px){
+  .layout{grid-template-columns:1fr}
+  .brand h1{font-size:19px}
+  .top-inner{flex-direction:column}
+  .user{justify-content:flex-start}
+  .card{padding:18px}
+}

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>회의 끝, 메일함에 결과가</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <h1>회의 끝, 메일함에 결과가</h1>
+      <p>회의 끝, 메일함에 결과가 바로 오도록</p>
+    </div>
+    <div class="user" id="userBox" hidden>
+      <span id="userEmail"></span>
+      <button class="btn-text" id="logoutBtn">로그아웃</button>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs" hidden>
+    <a href="#upload" data-tab="upload">녹음 올리기</a>
+    <a href="#minutes" data-tab="minutes">회의록 보기</a>
+  </nav>
+</header>
+
+<main>
+  <!-- 로그인 -->
+  <section id="view-login" class="view" hidden>
+    <div class="card center">
+      <h2>로그인</h2>
+      <p class="muted">내 구글 계정으로만 들어갈 수 있어요.</p>
+      <button class="btn-google" id="loginBtn">
+        <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.1C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.6z"/><path fill="#FBBC05" d="M10.6 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.9-6.1C1 16.6 0 20.2 0 24s1 7.4 2.7 10.7l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.2 0-11.5-4.1-13.4-9.9l-7.9 6.1C6.6 42.6 14.6 48 24 48z"/></svg>
+        Google 계정으로 로그인
+      </button>
+      <div class="error" id="loginError" hidden></div>
+    </div>
+  </section>
+
+  <!-- 녹음 올리기 -->
+  <section id="view-upload" class="view" hidden>
+    <div class="card">
+      <h2>녹음 올리기</h2>
+      <p class="muted">회의 녹음 파일(한국어)을 골라 주세요. 회의록이 만들어지면 메일로도 보내 드려요.</p>
+      <label class="drop" id="drop">
+        <input type="file" id="fileInput" accept="audio/*,.m4a,.mp3,.wav,.webm,.ogg" hidden>
+        <span class="drop-icon">🎙️</span>
+        <strong id="dropText">여기를 눌러 파일 고르기</strong>
+        <small class="muted">또는 파일을 끌어다 놓기 · mp3, m4a, wav</small>
+      </label>
+      <input class="title-input" id="titleInput" placeholder="회의 제목 (예: 10월 노사협의회 사전회의)">
+      <button class="btn-primary" id="startBtn" disabled>회의록 만들기</button>
+
+      <ol class="steps" id="steps" hidden>
+        <li data-step="upload">녹음 올리는 중</li>
+        <li data-step="transcribe">글로 옮기는 중</li>
+        <li data-step="summarize">회의록 만드는 중</li>
+        <li data-step="mail">메일 보내는 중</li>
+      </ol>
+      <div class="done" id="doneBox" hidden>
+        <span id="doneMsg"></span>
+        <a href="#" id="openResult">회의록 보기 →</a>
+      </div>
+      <div class="error" id="errorBox" hidden></div>
+    </div>
+  </section>
+
+  <!-- 회의록 보기 -->
+  <section id="view-minutes" class="view" hidden>
+    <div class="layout">
+      <aside class="card list">
+        <h2>지난 회의록</h2>
+        <ul id="minuteList"></ul>
+      </aside>
+      <article class="card detail" id="detail"></article>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
